@@ -6,19 +6,44 @@
 //  Copyright © 2018 SeventyFly. All rights reserved.
 //
 
-import UIKit
-import CoreData
-
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    var window: UIWindow?
-
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        return true
-    }
+    import CoreData
+    import GoogleMaps
+    import GooglePlaces
+    import UIKit
+    import Firebase
+        
+        let primaryColor = UIColor(red: 23/255, green: 37/255, blue: 42/255, alpha: 1)
+        let secondaryColor = UIColor(red: 40/255, green: 47/255, blue: 60/255, alpha: 1)
+        
+        @UIApplicationMain
+        class AppDelegate: UIResponder, UIApplicationDelegate {
+            
+            var window: UIWindow?
+            
+            
+            func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+                
+                GMSServices.provideAPIKey("AIzaSyDXZEeH2dQamjsgnlr8zEB-WlyuIKG840E")
+                GMSPlacesClient.provideAPIKey("AIzaSyDXZEeH2dQamjsgnlr8zEB-WlyuIKG840E")
+                FirebaseApp.configure()
+                                
+                _ = Auth.auth().addStateDidChangeListener { auth, user in
+                    
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    
+                    if user != nil {
+                        let controller = storyboard.instantiateViewController(withIdentifier: "MainTabBarController") as! UITabBarController
+                        self.window?.rootViewController = controller
+                        self.window?.makeKeyAndVisible()
+                    } else {
+                        let controller = storyboard.instantiateViewController(withIdentifier: "MenuViewController") as! MenuViewController
+                        self.window?.rootViewController = controller
+                        self.window?.makeKeyAndVisible()
+                    }
+                }
+                
+                return true
+            }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

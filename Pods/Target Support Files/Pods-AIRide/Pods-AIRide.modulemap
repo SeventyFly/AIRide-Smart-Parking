@@ -1,0 +1,6 @@
+framework module Pods_AIRide {
+  umbrella header "Pods-AIRide-umbrella.h"
+
+  export *
+  module * { export * }
+}
